@@ -17,6 +17,8 @@ class MainTableController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchTapped))
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
@@ -28,8 +30,23 @@ class MainTableController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
 
         let word = playData.allWords[indexPath.row]
-        cell.textLabel!.text = word + " — \(playData.wordCounts[word]!)"
+        cell.textLabel!.text = "\(word) — \(playData.wordCounts.count(for: word))"
         return cell
+    }
+    
+    @objc func searchTapped() {
+        let ac = UIAlertController(title: "Filter…", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+
+        ac.addAction(UIAlertAction(title: "Filter", style: .default) { [unowned self] _ in
+            let userInput = ac.textFields?[0].text ?? "0"
+            self.playData.applyUserFilter(userInput)
+            self.tableView.reloadData()
+        })
+
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(ac, animated: true)
     }
     
 }

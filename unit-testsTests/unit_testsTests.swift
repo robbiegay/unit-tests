@@ -31,9 +31,39 @@ class unit_testsTests: XCTestCase {
     
     func testWordCountsAreCorrect() {
         let playData = PlayData()
-        XCTAssertEqual(playData.wordCounts["Lorenzo"], 24, "Lorenzo must equal 24.")
-        XCTAssertEqual(playData.wordCounts["Aside"], 175, "Aside must equal 24.")
-        XCTAssertEqual(playData.wordCounts["Re"], 154, "Re must equal 24.")
+        XCTAssertEqual(playData.wordCounts.count(for: "Lorenzo"), 24, "Lorenzo must equal 24.")
+        XCTAssertEqual(playData.wordCounts.count(for: "Aside"), 175, "Aside must equal 24.")
+        XCTAssertEqual(playData.wordCounts.count(for: "Re"), 154, "Re must equal 24.")
+    }
+    
+    func testWordsLoadQuickly() {
+        measure {
+            _ = PlayData()
+        }
+    }
+    
+    // Test driven development: write tests that fail, then write just enough code to make them pass.
+    
+    func testUserFilterWorks() {
+        let playData = PlayData()
+
+        playData.applyUserFilter("100")
+        XCTAssertEqual(playData.filteredWords.count, 495, "495 words occur 100 or more times.")
+
+        playData.applyUserFilter("1000")
+        XCTAssertEqual(playData.filteredWords.count, 55, "55 words occur 1000 or more times.")
+
+        playData.applyUserFilter("10000")
+        XCTAssertEqual(playData.filteredWords.count, 1, "1 word occurs 10,000 or more times.")
+
+        playData.applyUserFilter("test")
+        XCTAssertEqual(playData.filteredWords.count, 56, "test occurs 56 times.")
+
+        playData.applyUserFilter("swift")
+        XCTAssertEqual(playData.filteredWords.count, 7, "swift occurs 7 times.")
+
+        playData.applyUserFilter("objective-c")
+        XCTAssertEqual(playData.filteredWords.count, 0, "objective-c occurs 0 times.")
     }
     
 }
