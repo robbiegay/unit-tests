@@ -21,9 +21,19 @@ class unit_testsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    // When you create a function that inputs and returns nothing, and begins with
+    // "test", Xcode assumes this is a test and plases the empty "run" triangle next to it
     func testAllWordsLoaded() {
         let playData = PlayData()
-        XCTAssertEqual(playData.allWords.count, 0, "allWords must be 0")
+        print(playData.allWords.count)
+        XCTAssertEqual(playData.allWords.count, 18440, "allWords was not 18440.")
+    }
+    
+    func testWordCountsAreCorrect() {
+        let playData = PlayData()
+        XCTAssertEqual(playData.wordCounts["Lorenzo"], 24, "Lorenzo must equal 24.")
+        XCTAssertEqual(playData.wordCounts["Aside"], 175, "Aside must equal 24.")
+        XCTAssertEqual(playData.wordCounts["Re"], 154, "Re must equal 24.")
     }
     
 }
